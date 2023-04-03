@@ -1,0 +1,22 @@
+function output = convolu (input1, input2)
+  nr1 = size(input1, 1);
+  nc1 = size(input1, 2);
+  nr2 = size(input2, 1);
+  nc2 = size(input2, 2); % input1, input2�� ��ũ�� �� ��ũ�� ���ϱ�
+  c=(nr2-1)/2; % �����е��� ���� �� c ���ϱ�
+  zp = [zeros(c, nc1);input1;zeros(c, nc1)]; % ��, �Ʒ��� �����е�
+  zp = [zeros(nr1+2*c,c) zp zeros(nr1+2*c,c)]; % ����, ���������� �����е�
+  zp = cast(zp,"double");input2=cast(input2,"double"); % ���� ��� �� 255�� �Ѵ� ��� ����� ���� ����ȯ
+  for x=1:nr1
+    for y=1:nc1  % (1,1)ȭ�Һ��� ������ ȭ�ұ��� ��� ȭ�ҿ� input2 ���;��� ���� ���
+      outsum=0;
+      for u=0:(nr2-1) % (x, y)ȭ�ҿ� ���;����
+        for v=0:(nr2-1)
+          outsum=outsum+zp((x+c)-c+u,(y+c)-c+v)*input2(u+1, v+1); 
+        endfor
+      endfor
+      new(x,y)=outsum; % input1�� (x, y)ȭ�ҿ� ���;��� ���� new(x,y)�� ����
+    endfor
+  endfor
+  output=new;
+endfunction
