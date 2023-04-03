@@ -1,0 +1,161 @@
+pkg load signal;
+
+G=imread("lena2.bmp");
+M=size(G, 1);
+N=size(G, 2);
+
+Q=[
+    16 11 10 16 24 40 51 61;
+    12 12 14 19 26 58 60 66;
+    14 13 16 24 40 57 69 57;
+    14 17 22 29 51 87 80 62;
+    18 22 37 56 68 109 103 77;
+    24 36 55 64 81 104 113 92;
+    49 64 78 87 103 121 120 101;
+    72 92 95 98 112 100 103 99 
+                               ];
+
+% B ���ϱ�            
+% DCT �� ����ȭ
+            
+for m=1:ceil(M/8) 
+
+  for n=1:ceil(N/8) 
+
+    B_Q(8*(m-1)+1:8*(m-1)+8, 8*(n-1)+1:8*(n-1)+8)=round(dct2(G(8*(m-1)+1:8*(m-1)+8, 8*(n-1)+1:8*(n-1)+8), 8, 8)./Q); 
+  endfor 
+
+endfor 
+
+% ������ȭ
+
+for m=1:ceil(M/8) 
+
+  for n=1:ceil(N/8) 
+
+    B_Q_IQ(8*(m-1)+1:8*(m-1)+8, 8*(n-1)+1:8*(n-1)+8)=Q.*B_Q(8*(m-1)+1:8*(m-1)+8, 8*(n-1)+1:8*(n-1)+8); 
+
+  endfor 
+
+endfor 
+
+% IDCT
+
+for m=1:ceil(M/8) 
+
+  for n=1:ceil(N/8) 
+
+    B(8*(m-1)+1:8*(m-1)+8, 8*(n-1)+1:8*(n-1)+8)=idct2(B_Q_IQ(8*(m-1)+1:8*(m-1)+8, 8*(n-1)+1:8*(n-1)+8), 8, 8);
+
+  endfor 
+
+endfor 
+
+
+
+% C ���ϱ�
+% DCT �� ����ȭ
+
+Q=0.5*Q;            
+for m=1:ceil(M/8) 
+
+  for n=1:ceil(N/8) 
+
+    C_Q(8*(m-1)+1:8*(m-1)+8, 8*(n-1)+1:8*(n-1)+8)=round(dct2(G(8*(m-1)+1:8*(m-1)+8, 8*(n-1)+1:8*(n-1)+8), 8, 8)./Q); 
+  endfor 
+
+endfor 
+
+% ������ȭ
+
+for m=1:ceil(M/8) 
+
+  for n=1:ceil(N/8) 
+
+    C_Q_IQ(8*(m-1)+1:8*(m-1)+8, 8*(n-1)+1:8*(n-1)+8)=Q.*C_Q(8*(m-1)+1:8*(m-1)+8, 8*(n-1)+1:8*(n-1)+8); 
+
+  endfor 
+
+endfor 
+
+% IDCT
+
+for m=1:ceil(M/8) 
+
+  for n=1:ceil(N/8) 
+
+    C(8*(m-1)+1:8*(m-1)+8, 8*(n-1)+1:8*(n-1)+8)=idct2(C_Q_IQ(8*(m-1)+1:8*(m-1)+8, 8*(n-1)+1:8*(n-1)+8), 8, 8);
+
+  endfor 
+
+endfor 
+
+
+
+% D ���ϱ�
+% DCT �� ����ȭ
+
+Q=2*1.5*Q;            
+for m=1:ceil(M/8) 
+
+  for n=1:ceil(N/8) 
+
+    D_Q(8*(m-1)+1:8*(m-1)+8, 8*(n-1)+1:8*(n-1)+8)=round(dct2(G(8*(m-1)+1:8*(m-1)+8, 8*(n-1)+1:8*(n-1)+8), 8, 8)./Q); 
+  endfor 
+
+endfor 
+
+% ������ȭ
+
+for m=1:ceil(M/8) 
+
+  for n=1:ceil(N/8) 
+
+    D_Q_IQ(8*(m-1)+1:8*(m-1)+8, 8*(n-1)+1:8*(n-1)+8)=Q.*D_Q(8*(m-1)+1:8*(m-1)+8, 8*(n-1)+1:8*(n-1)+8); 
+
+  endfor 
+
+endfor 
+
+% IDCT
+
+for m=1:ceil(M/8) 
+
+  for n=1:ceil(N/8) 
+
+    D(8*(m-1)+1:8*(m-1)+8, 8*(n-1)+1:8*(n-1)+8)=idct2(D_Q_IQ(8*(m-1)+1:8*(m-1)+8, 8*(n-1)+1:8*(n-1)+8), 8, 8);
+
+  endfor 
+
+endfor 
+
+
+
+
+
+B=cast(B,"uint8");
+figure();imshow(B);
+C=cast(C,"uint8");
+figure();imshow(C);
+D=cast(D,"uint8");
+figure();imshow(D);
+
+err_B=abs(G-B);
+err_C=abs(G-C);
+err_D=abs(G-D);
+
+err_B_m=mean(mean(err_B));
+err_C_m=mean(mean(err_C));
+err_D_m=mean(mean(err_D));
+
+err_B = cast(err_B,"double");
+err_C = cast(err_C,"double");
+err_D = cast(err_D,"double");
+
+err_B=cast(255*err_B/max(max(err_B)),"uint8");
+err_C=cast(255*err_C/max(max(err_C)),"uint8");
+err_D=cast(255*err_D/max(max(err_D)),"uint8");
+
+figure();imshow(err_B);
+figure();imshow(err_C);
+figure();imshow(err_D);
