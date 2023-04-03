@@ -1,0 +1,9 @@
+img=imread("lena2.bmp");
+filter1 = [-1 -1 -1; -1 9 -1; -1 -1 -1];
+filter2 = [1 1 1; 1 1 1; 1 1 1]/9;
+highpass=convolu(img, filter1);
+lowpass=convolu(img, filter2);
+
+figure(1);imshow(img);
+figure(2);imshow(highpass);
+figure(3);imshow(lowpass);
