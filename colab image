@@ -1,0 +1,16 @@
+from google.colab import drive
+drive.mount('/content/drive')
+import cv2
+from google.colab.patches import cv2_imshow
+import sys
+import numpy as np
+src=cv2.imread('/content/drive/MyDrive/Colab Notebooks/모나리자.bmp')
+if src is none:
+print('image load failed')
+sys.exit()
+dst=cv2.bilateralFilter(src,-1,10,5)
+cv2_imshow(src)
+cv2_imshow(dst)
+cv2.waitKey()
+
+cv2.destroyAllWindows()
