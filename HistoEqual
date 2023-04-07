@@ -1,0 +1,28 @@
+void CImageProcessingDoc::OnHistoEqual()
+{
+int i, value;
+unsinged char LOW, HIGH, Temp;
+double SUM=0;
+
+m_Re_height=m_height;
+m_Re_width=m_width;
+m_Re_size=m_Re_height*m_Re_width;
+LOW=0;
+HIGH=255;
+//초기화
+for(i=0; i<256 ; i++){
+value=(int)m_InputImage[i];
+m_HIST[value]++;
+}
+//누적 히스토그램 생성
+for(i=0 ; i<256; i++){
+SUM +=m_HIST[i];
+m_Sum_of_HIST[i]=SUM;
+}
+m_OutputImage=new unsigned char[m_Re_size];
+//입력 영상을 평활화된 영상으로 출력
+for(i=0 ; i<m_size ; i++){
+Temp=m_InputImage[i];
+m_OutputImage[i]=(unsigned char)(m_Sum_Of_HIST[Temp]*HIGH/m_size);
+}
+}
