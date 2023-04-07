@@ -1,0 +1,54 @@
+from google.colab import drive
+drive.mount('/content/drive')
+import cv2
+from google.colab.patches import cv2_imshow
+import sys
+import numpy as np
+src=cv2.imread('/content/drive/MyDrive/Colab Notebooks/모나리자.bmp')
+if src is none:
+print('image load failed')
+sys.exit()
+dst=cv2.bilateralFilter(src,-1,10,5)
+cv2_imshow(src)
+cv2_imshow(dst)
+cv2.waitKey()
+
+cv2.destroyAllWindows()
+
+import cv2import matplotlib.pyplot as plt
+img=cv2.imread('/content/drive/MyDrive/Colab Notebooks/jungsoft97_profile.jpg')
+channels=cv2.split(img)
+colors=['b','g','r']
+for ch, color in zip(channels,colors):
+  hist=cv2.calcHist([ch],[0],None,[256],[0,256])
+  plt.plot(hist, color=color)
+  plt.show()
+
+  import cv2
+  from google.colab.patches import cv2_imshow
+  import sys
+  import numpy np 
+  import argparse
+  import os
+  import matplotlib.pyplot as plt 
+
+  path='/content/drive/MyDrive/Colab Notebooks/모나리자.bmp'
+  #입력 받은 이미지를 불러 옵니다.
+  src=cv2.imread(path,cv2.IMREAD_GRAYSCALE)
+  #불러온 이미지에 histogram equalization
+  dst=cv2.equalizeHist(src)
+  srcHist=cv2.calcHist(images=[src])
+
+  dst=cv2.equalizeHist(src)
+  srcHist=cv2.calcHist(images=[src],
+                       channels=[0]
+                       mask=None,
+                       histSize=[256],
+                       ranges=[0,256])
+  dstHist=cv2.calcHist(images=[dst],
+                       channels=[0],
+                       mask=None,
+                       histSize=[256],
+                       ranges=[0,256])
+  cv2_imshow(src)
+  cv2_imshow(dst)
