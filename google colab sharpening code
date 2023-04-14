@@ -1,0 +1,21 @@
+import cv2
+import numpy as np
+from google.colab.patches import cv2_imshow
+
+image=cv2.imread('연구실위치.png')
+gray=cv2.cvtColor(image,cv2.COLOR_BGR2GRAV)
+
+plt.imshow(cv2.cvtColor(image,cv2COLOR_BGR2RGB))
+plt.show()
+
+mask1=np.array([[-1,0,0],[0,0,0],[0,0,1]])
+mask2=np.array([[1,1,1][1,-8,1],[1,1,1]])
+
+out1=cv2.filter2D(gray,-1,mask1)
+out2=cv2.filter2D(gray,-1,mask2)
+
+cv2_imshow(gray)
+cv2_imshow(out1)
+cv2_imshow(out2)
+
+cv2.waitKey(0)
