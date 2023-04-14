@@ -1,0 +1,14 @@
+import cv2
+import matplotlib.pyplot as plt 
+import numpy as np
+image=cv2.imread('연구실위치.png')
+plt.imshow(cv2.cvtcolor(image,cv2.color_BGR@RGB))
+plt.show()
+
+size=4
+kernel=np.ones((size,size),np.float32)/(size**2)
+print(kernel)
+
+dst=cv2.filter2D(image,-1,kernel)
+plt.imshow(cv2.cvtColor(dst,cv2.COLOR_BGR2RGB))
+plt.show()
